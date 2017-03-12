@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="App">
+<head>
+    <meta charset="UTF-8">
+    <title>Honours Project</title>
+    
+    <!--Ionic Libs-->
+    <link rel="stylesheet" href="lib/ionic/css/ionic.css">
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    
+    <script src="cordova.js"></script>
+    
+    <!--My app-->
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/app.js"></script>
+    
+</head>
+
+<body ng-controller="AppCtrl">
+        <ion-tabs class="tabs-dark">
+           <ion-tab title="Carpools">
+               
+                <ion-header-bar class="bar-assertive">
+                    <h1 class="title">Carpooling</h1>
+                    <input type="button" ng-click="refresh()" />
+                </ion-header-bar>
+
+                <ion-content has-header="true">
+                   <ion-refresher on-refresh="refresh()">
+                   </ion-refresher>
+                   <ion-card>
+                       <ion-item ng-repeat="u in user">
+                           <p>Logged in as: {{u.forename}} {{u.surname}}</p>
+                       </ion-item>
+                   </ion-card>
+                    <ion-list>
+                        <ion-item ng-repeat="c in carpools">
+                               <h2>{{c.date}}</h2>
+                               <h3>Host: {{c.organiser}}</h3>
+                               <p>{{c.tdepart}} -- {{c.tarrive}}</p>
+                               <p>Capacity: {{c.capacity}}</p>
+                               <p>Round Trip: <b>{{c.roundtrip}}</b></p>
+                        </ion-item>
+                    </ion-list>
+                </ion-content>
+            </ion-tab>
+            
+            <ion-tab title="Arrange">
+                 <ion-header-bar class="bar-assertive">
+                    <h1 class="title">Arrange Carpool</h1>
+                </ion-header-bar>
+                
+                <ion-content>
+                    <div class="list list-inset"align="" ng-controller = "ArrangeCtrl">
+                      <label class="item item-input item-stacked-label">
+                           <span class="input-label">Capacity</span>
+                           <input type="number" placeholder="Capacity" ng-model="capacity"/>
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                           <span class="input-label">Date</span>
+                           <input type="date" ng-model="date"/>
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                           <span class="input-label">Departure Time (Earlest)</span>
+                           <input type="time" min="06:00" max="21:00" ng-model="tdepart"/>
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                           <span class="input-label">Arrival Time (Latest)</span>
+                           <input type="time" min="06:00" max="21:00" ng-model="tarrive"/>
+                        </label>
+                        <label class="item item-input item-select item-stacked-label">
+                           <div class="input-label">
+                               Origin
+                           </div>
+                           <select ng-model="origin">
+                               <option value="1">Merchiston</option>
+                               <option value="2">Sighthill</option>
+                               <option value="3">Craiglockhart</option>
+                           </select>
+                        </label>
+                        <label class="item item-input item-select item-stacked-label">
+                           <div class="input-label">
+                               Destination
+                           </div>
+                           <select ng-model="destination">
+                               <option value="1">Merchiston</option>
+                               <option value="2">Sighthill</option>
+                               <option value="3">Craiglockhart</option>
+                           </select>
+                        </label>
+                        <li class="item item-checkbox">
+                            Round Trip
+                            <label class="checkbox checkbox-assertive">
+                                <input type="checkbox" ng-model="roundtrip">
+                            </label>
+                        </li>
+                        <br />
+                        <button class="button button-assertive button-block icon-right ion-android-car" ng-click="arrangeCarpool()" value="Send" ng-disabled="capacity == null || capacity > 6 || capacity <= 1 || date == null || tdepart == null || tarrive == null || origin == null || destination == null || origin == destination">
+                            Arrange
+                        </button>
+                    </div>
+                </ion-content>               
+            </ion-tab>
+            
+            <ion-tab title="Debug" ng-controller="DebugCtrl">
+                 <ion-header-bar class="bar-assertive">
+                    <h1 class="title">Debug</h1>
+                    <input type="button" ng-click="debugRefresh()" />
+                </ion-header-bar>    
+                <ion-content>
+                    <div align="center" ng-controller = "UserCtrl">
+                       <input type="text" ng-model="foo" placeholder="Enter ID" style="width:100px; text-align=center"/>
+                       <input type="button" ng-click="setId()" value="Send" ng-disabled="foo == null" style="width:100px;"/>
+                   </div>
+                   <ion-refresher on-refresh="debugRefresh()">
+                   </ion-refresher>
+                   <ion-card>
+                       <ion-item ng-repeat="u in user">
+                           <p>Logged in as: {{u.forename}} {{u.surname}}</p>
+                       </ion-item>
+                   </ion-card>
+                    <ion-list>
+                        <ion-item ng-repeat="p in proposals">
+                           <h2>Carpool ID: {{p.cid}}</h2>
+                           <h2>Cost: {{p.cost}}</h2>
+                           <h3>Degree of Separation: {{p.separation}}</h3>
+                           <h3>UID: {{p.uid}}</h3>
+                           <button class="button button-assertive button-block icon-right ion-android-car" ng-click="acceptCarpool($index)" value="Send" ng-disabled="">
+                            Accept
+                           </button>
+                        </ion-item>
+                    </ion-list>
+                </ion-content>  
+                         
+            </ion-tab>
+        </ion-tabs>
+</body>
+</html>
